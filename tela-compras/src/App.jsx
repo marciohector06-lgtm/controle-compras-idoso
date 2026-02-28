@@ -1,24 +1,44 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from 'react';
+import Login from './pages/Login/Login';
+import Cadastro from './pages/Cadastro/Cadastro';
+import './App.css';
 
 function App() {
-  const [novoItem, setNovoItem] = useState('')
-  const [listaCompras, setListaCompras] = useState([])
+  // Estado que controla a navegação. Começa na tela de login.
+  const [telaAtual, setTelaAtual] = useState('login'); 
+
+  // --- CÓDIGO DO SEU COLEGA (MANTIDO INTACTO) ---
+  const [novoItem, setNovoItem] = useState('');
+  const [listaCompras, setListaCompras] = useState([]);
 
   const adicionarItem = () => {
     // R&N (HdU 01): O sistema não deve permitir o cadastro de itens sem nome
     if (novoItem.trim() === '') {
-      alert('O nome do item é obrigatório!')
-      return
+      alert('O nome do item é obrigatório!');
+      return;
     }
 
-    setListaCompras([...listaCompras, novoItem])
-    setNovoItem('')
+    setListaCompras([...listaCompras, novoItem]);
+    setNovoItem('');
+  };
+  // ----------------------------------------------
+
+  // Lógica de Renderização Condicional
+  if (telaAtual === 'login') {
+    return <Login mudarTela={setTelaAtual} />;
   }
 
+  if (telaAtual === 'cadastro') {
+    return <Cadastro mudarTela={setTelaAtual} />;
+  }
+
+  // Se a telaAtual for 'home', renderiza o sistema do seu colega
   return (
     <div>
-      <h1>🛒 Controle de Necessidades e Compras</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1>🛒 Controle de Necessidades e Compras</h1>
+        <button onClick={() => setTelaAtual('login')}>Sair da Conta</button>
+      </div>
       
       <div>
         <input 
@@ -41,7 +61,7 @@ function App() {
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
