@@ -1,47 +1,70 @@
-import { useState } from 'react'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import Cadastro from './Cadastro';
+import Lista from './Lista';
+import Agenda from './Agenda';
+import './App.css';
 
-function App() {
-  const [novoItem, setNovoItem] = useState('')
-  const [listaCompras, setListaCompras] = useState([])
+const App = () => {
+  const [shoppingList, setShoppingList] = useState(() => {
+    const saved = localStorage.getItem('cuidado_lista');
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const adicionarItem = () => {
-    // R&N (HdU 01): O sistema não deve permitir o cadastro de itens sem nome
-    if (novoItem.trim() === '') {
-      alert('O nome do item é obrigatório!')
-      return
-    }
+  const [appointments, setAppointments] = useState(() => {
+    const saved = localStorage.getItem('cuidado_agenda');
+    return saved ? JSON.parse(saved) : [];
+  });
 
-    setListaCompras([...listaCompras, novoItem])
-    setNovoItem('')
-  }
+  useEffect(() => {
+    localStorage.setItem('cuidado_lista', JSON.stringify(shoppingList));
+  }, [shoppingList]);
+
+  useEffect(() => {
+    localStorage.setItem('cuidado_agenda', JSON.stringify(appointments));
+  }, [appointments]);
+
+  const handleAddItem = (data) => {
+    setShoppingList([...shoppingList, { id: crypto.randomUUID(), ...data, status: 'Pendente' }]);
+  };
+
+  const handleToggleStatus = (id) => {
+    setShoppingList(shoppingList.map(item => item.id === id ? { ...item, status: 'Comprado' } : item));
+  };
+
+  const handleArchiveItem = (id) => {
+    setShoppingList(shoppingList.map(item => item.id === id ? { ...item, status: 'Arquivado' } : item));
+  };
+
+  const handleAddAppointment = (data) => {
+    setAppointments([...appointments, data]);
+  };
+
+  const handleDeleteAppointment = (id) => {
+    setAppointments(appointments.filter(a => a.id !== id));
+  };
 
   return (
-    <div>
-      <h1>🛒 Controle de Necessidades e Compras</h1>
+    <main className="main-container">
+      <header className="app-header">
+        <h1>Controle de Suprimentos do Idoso</h1>
+        <p>Gestão de Farmácia, Mercado e Agenda</p>
+      </header>
       
-      <div>
-        <input 
-          type="text" 
-          placeholder="Digite o nome do item..." 
-          data-testid="input-novo-item"
-          value={novoItem} 
-          onChange={(evento) => setNovoItem(evento.target.value)} 
-        />
-        <button data-testid="btn-salvar-item" onClick={adicionarItem}>
-          Salvar
-        </button>
-      </div>
+      <Cadastro onAddItem={handleAddItem} />
 
-      <ul>
-        {listaCompras.map((item, index) => (
-          <li key={index} data-testid="item-lista">
-            {item}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+      <Lista 
+        itens={shoppingList.filter(item => item.status !== 'Arquivado')} 
+        onToggleStatus={handleToggleStatus} 
+        onArchive={handleArchiveItem}
+      />
 
-export default App
+      <Agenda 
+        appointments={appointments}
+        onAddAppointment={handleAddAppointment}
+        onDeleteAppointment={handleDeleteAppointment}
+      />
+    </main>
+  );
+};
+
+export default App;

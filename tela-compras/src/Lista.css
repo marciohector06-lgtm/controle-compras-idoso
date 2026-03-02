@@ -1,0 +1,78 @@
+.lista-container {
+  margin-top: 30px;
+}
+
+.lista-container h2 {
+  color: #333;
+  font-size: 1.3rem;
+  border-left: 4px solid #0d6efd;
+  padding-left: 10px;
+}
+
+.empty-msg {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.item-card.pendente {
+  background-color: #fff;
+  border-left: 4px solid #ffc107;
+}
+
+.item-card.comprado {
+  background-color: #f8f9fa;
+  border-left: 4px solid #198754;
+  opacity: 0.8;
+}
+
+.badge-urgente {
+  background-color: #dc3545;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.item-obs {
+  margin: 5px 0 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.btn-comprado {
+  background-color: #198754;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-arquivar {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
