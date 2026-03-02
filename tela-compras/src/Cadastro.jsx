@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Cadastro.css';
 
 const Cadastro = ({ onAddItem }) => {
-  const [formData, setFormData] = useState({
+  const [dados, setDados] = useState({
     nome: '',
     categoria: 'Medicamento',
     urgencia: 'Normal',
@@ -11,51 +11,62 @@ const Cadastro = ({ onAddItem }) => {
     idoso: ''
   });
   
-  const [errorMessage, setErrorMessage] = useState('');
+  const [erro, setErro] = useState('');
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    if (name === 'nome' && errorMessage) setErrorMessage('');
+  const lidarMudanca = (e) => {
+    const nomeCampo = e.target.name;
+    const valorCampo = e.target.value;
+    
+    setDados({ ...dados, [nomeCampo]: valorCampo });
+    
+    if (nomeCampo === 'nome') {
+      setErro('');
+    }
   };
 
-  const handleSubmit = (e) => {
+  const enviarFormulario = (e) => {
     e.preventDefault();
 
-    if (!formData.nome.trim()) {
-      setErrorMessage("O nome do item é obrigatório");
+    if (dados.nome === '') {
+      setErro("O nome do item é obrigatório");
       return;
     }
 
-    onAddItem(formData);
+    onAddItem(dados);
     
-    setFormData({ nome: '', categoria: 'Medicamento', urgencia: 'Normal', obs: '', responsavel: '', idoso: '' });
-    setErrorMessage('');
+    setDados({ 
+      nome: '', 
+      categoria: 'Medicamento', 
+      urgencia: 'Normal', 
+      obs: '', 
+      responsavel: '', 
+      idoso: '' 
+    });
+    setErro('');
   };
 
   return (
     <section className="cadastro-container">
       <h2>Cadastrar Novo Item</h2>
-      <form onSubmit={handleSubmit} className="cadastro-form">
+      <form onSubmit={enviarFormulario} className="cadastro-form">
         
         <div className="input-group">
           <input 
             type="text" 
             name="nome"
-            value={formData.nome}
-            onChange={handleInputChange}
+            value={dados.nome}
+            onChange={lidarMudanca}
             placeholder="Nome do item (Ex: Losartana 50mg)"
-            data-testid="input-new-item"
           />
-          {errorMessage && <span className="error-text" data-testid="error-message">{errorMessage}</span>}
+          {erro && <span className="error-text">{erro}</span>}
         </div>
 
         <div className="input-group">
           <input 
             type="text" 
             name="idoso"
-            value={formData.idoso}
-            onChange={handleInputChange}
+            value={dados.idoso}
+            onChange={lidarMudanca}
             placeholder="Para qual idoso? (Ex: Vô João)"
           />
         </div>
@@ -64,21 +75,21 @@ const Cadastro = ({ onAddItem }) => {
           <input 
             type="text" 
             name="responsavel"
-            value={formData.responsavel}
-            onChange={handleInputChange}
+            value={dados.responsavel}
+            onChange={lidarMudanca}
             placeholder="Seu nome (Familiar responsável)"
           />
         </div>
 
         <div className="row-group">
-          <select name="categoria" value={formData.categoria} onChange={handleInputChange}>
+          <select name="categoria" value={dados.categoria} onChange={lidarMudanca}>
             <option value="Medicamento">Medicamento</option>
             <option value="Higiene">Higiene Pessoal</option>
             <option value="Alimentação">Alimentação</option>
             <option value="Outros">Outros</option>
           </select>
 
-          <select name="urgencia" value={formData.urgencia} onChange={handleInputChange}>
+          <select name="urgencia" value={dados.urgencia} onChange={lidarMudanca}>
             <option value="Normal">Normal</option>
             <option value="Urgente">🚨 Urgente (Acabou!)</option>
           </select>
@@ -88,13 +99,13 @@ const Cadastro = ({ onAddItem }) => {
           <input 
             type="text" 
             name="obs"
-            value={formData.obs}
-            onChange={handleInputChange}
+            value={dados.obs}
+            onChange={lidarMudanca}
             placeholder="Observações adicionais"
           />
         </div>
 
-        <button type="submit" data-testid="button-add">
+        <button type="submit">
           Salvar Item
         </button>
       </form>

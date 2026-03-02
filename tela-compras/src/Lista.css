@@ -1,78 +1,64 @@
 .lista-container {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .lista-container h2 {
-  color: #333;
-  font-size: 1.3rem;
-  border-left: 4px solid #0d6efd;
-  padding-left: 10px;
+  color: black;
+  border-bottom: 1px solid blue; 
+  padding-bottom: 5px;
 }
 
 .empty-msg {
-  color: #6c757d;
-  font-style: italic;
+  color: gray;
 }
 
 .lista {
   list-style: none;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .item-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
+  padding: 10px;
+  border: 1px solid black; 
+  margin-bottom: 10px;
+  background-color: white;
 }
 
+
 .item-card.pendente {
-  background-color: #fff;
-  border-left: 4px solid #ffc107;
+  background-color: #ffffcc; 
 }
 
 .item-card.comprado {
-  background-color: #f8f9fa;
-  border-left: 4px solid #198754;
-  opacity: 0.8;
+  background-color: #ccffcc; 
 }
 
 .badge-urgente {
-  background-color: #dc3545;
+  background-color: red;
   color: white;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  margin-left: 10px;
+  padding: 2px;
   font-weight: bold;
+  margin-left: 5px;
 }
 
 .item-obs {
-  margin: 5px 0 0 0;
-  font-size: 0.9rem;
-  color: #666;
+  margin-top: 5px;
+  color: #333;
+  font-size: 14px;
 }
 
 .btn-comprado {
-  background-color: #198754;
+  background-color: green;
   color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  border: 1px solid black;
+  padding: 5px 10px;
   cursor: pointer;
-  font-weight: bold;
 }
 
 .btn-arquivar {
-  background-color: #6c757d;
+  background-color: gray;
   color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  border: 1px solid black;
+  padding: 5px 10px;
   cursor: pointer;
 }

@@ -1,67 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import Cadastro from './Cadastro';
 import Lista from './Lista';
-import Agenda from './Agenda';
 import './App.css';
 
 const App = () => {
-  const [shoppingList, setShoppingList] = useState(() => {
-    const saved = localStorage.getItem('cuidado_lista');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const listaSalva = localStorage.getItem('cuidado_lista');
 
-  const [appointments, setAppointments] = useState(() => {
-    const saved = localStorage.getItem('cuidado_agenda');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [suprimentos, setSuprimentos] = useState(listaSalva ? JSON.parse(listaSalva) : []);
 
   useEffect(() => {
-    localStorage.setItem('cuidado_lista', JSON.stringify(shoppingList));
-  }, [shoppingList]);
+    localStorage.setItem('cuidado_lista', JSON.stringify(suprimentos));
+  }, [suprimentos]);
 
-  useEffect(() => {
-    localStorage.setItem('cuidado_agenda', JSON.stringify(appointments));
-  }, [appointments]);
-
-  const handleAddItem = (data) => {
-    setShoppingList([...shoppingList, { id: crypto.randomUUID(), ...data, status: 'Pendente' }]);
+  const adicionarItem = (dados) => {
+    const novoItem = { 
+      id: Date.now(),
+      ...dados, 
+      status: 'Pendente' 
+    };
+    setSuprimentos([...suprimentos, novoItem]);
   };
 
-  const handleToggleStatus = (id) => {
-    setShoppingList(shoppingList.map(item => item.id === id ? { ...item, status: 'Comprado' } : item));
+  const marcarComoComprado = (id) => {
+    const listaAtualizada = suprimentos.map(item => {
+      if (item.id === id) {
+        return { ...item, status: 'Comprado' };
+      }
+      return item;
+    });
+    setSuprimentos(listaAtualizada);
   };
 
-  const handleArchiveItem = (id) => {
-    setShoppingList(shoppingList.map(item => item.id === id ? { ...item, status: 'Arquivado' } : item));
-  };
-
-  const handleAddAppointment = (data) => {
-    setAppointments([...appointments, data]);
-  };
-
-  const handleDeleteAppointment = (id) => {
-    setAppointments(appointments.filter(a => a.id !== id));
+  const arquivarItem = (id) => {
+    const listaAtualizada = suprimentos.map(item => {
+      if (item.id === id) {
+        return { ...item, status: 'Arquivado' };
+      }
+      return item;
+    });
+    setSuprimentos(listaAtualizada);
   };
 
   return (
     <main className="main-container">
       <header className="app-header">
         <h1>Controle de Suprimentos do Idoso</h1>
-        <p>Gestão de Farmácia, Mercado e Agenda</p>
+        <p>Gestão de Farmácia e Mercado</p>
       </header>
       
-      <Cadastro onAddItem={handleAddItem} />
+      <Cadastro onAddItem={adicionarItem} />
 
       <Lista 
-        itens={shoppingList.filter(item => item.status !== 'Arquivado')} 
-        onToggleStatus={handleToggleStatus} 
-        onArchive={handleArchiveItem}
-      />
-
-      <Agenda 
-        appointments={appointments}
-        onAddAppointment={handleAddAppointment}
-        onDeleteAppointment={handleDeleteAppointment}
+        itens={suprimentos.filter(item => item.status !== 'Arquivado')} 
+        onToggleStatus={marcarComoComprado} 
+        onArchive={arquivarItem}
       />
     </main>
   );
