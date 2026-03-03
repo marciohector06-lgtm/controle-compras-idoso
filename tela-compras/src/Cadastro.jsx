@@ -27,8 +27,8 @@ const Cadastro = ({ onAddItem }) => {
   const enviarFormulario = (e) => {
     e.preventDefault();
 
-    if (dados.nome === '') {
-      setErro("O nome do item é obrigatório");
+    if (dados.nome.trim() === '' || dados.idoso.trim() === '') {
+      setErro("O nome do item e do idoso não podem ficar em branco ou só com espaços.");
       return;
     }
 
