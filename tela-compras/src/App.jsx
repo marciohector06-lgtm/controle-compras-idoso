@@ -1,62 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import Cadastro from './Cadastro';
-import Lista from './Lista';
 import './App.css';
 
-const App = () => {
-  const listaSalva = localStorage.getItem('cuidado_lista');
+function App() {
+  const [itens, setItens] = useState([]);
 
-  const [suprimentos, setSuprimentos] = useState(listaSalva ? JSON.parse(listaSalva) : []);
-
+  
   useEffect(() => {
-    localStorage.setItem('cuidado_lista', JSON.stringify(suprimentos));
-  }, [suprimentos]);
+    fetch('http://localhost:3000/suprimentos')
+      .then((resposta) => resposta.json())
+      .then((dados) => setItens(dados))
+      .catch((erro) => console.log("Erro ao buscar os itens:", erro));
+  }, []);
 
-  const adicionarItem = (dados) => {
-    const novoItem = { 
-      id: Date.now(),
-      ...dados, 
-      status: 'Pendente' 
-    };
-    setSuprimentos([...suprimentos, novoItem]);
-  };
-
-  const marcarComoComprado = (id) => {
-    const listaAtualizada = suprimentos.map(item => {
-      if (item.id === id) {
-        return { ...item, status: 'Comprado' };
-      }
-      return item;
-    });
-    setSuprimentos(listaAtualizada);
-  };
-
-  const arquivarItem = (id) => {
-    const listaAtualizada = suprimentos.map(item => {
-      if (item.id === id) {
-        return { ...item, status: 'Arquivado' };
-      }
-      return item;
-    });
-    setSuprimentos(listaAtualizada);
+  
+  const adicionarItemNoServidor = (novoItem) => {
+    fetch('http://localhost:3000/suprimentos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(novoItem), 
+    })
+      .then((resposta) => resposta.json())
+      .then((dadosDoServidor) => {
+        
+        setItens([...itens, dadosDoServidor.item]);
+      })
+      .catch((erro) => console.log("Erro ao salvar o item:", erro));
   };
 
   return (
-    <main className="main-container">
-      <header className="app-header">
-        <h1>Controle de Suprimentos do Idoso</h1>
-        <p>Gestão de Farmácia e Mercado</p>
-      </header>
+    <div className="app-container">
+      <h1>Controle de Suprimentos </h1>
       
-      <Cadastro onAddItem={adicionarItem} />
-
-      <Lista 
-        itens={suprimentos.filter(item => item.status !== 'Arquivado')} 
-        onToggleStatus={marcarComoComprado} 
-        onArchive={arquivarItem}
-      />
-    </main>
+      
+      <Cadastro onAddItem={adicionarItemNoServidor} />
+    
+     
+      <div style={{ marginTop: '20px', padding: '10px', background: '#f0f0f0', borderRadius: '8px' }}>
+        <h3>Itens salvos no Banco de Dados:</h3>
+        {itens.length === 0 ? (
+          <p>Nenhum item cadastrado ainda.</p>
+        ) : (
+          <pre>{JSON.stringify(itens, null, 2)}</pre>
+        )}
+      </div>
+      
+    </div>
   );
-};
+}
 
 export default App;
