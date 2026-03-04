@@ -1,38 +1,57 @@
+import React, { useState } from 'react';
 import './Login.css';
 
-// Recebemos a função 'mudarTela' como propriedade (prop)
-export default function Login({ mudarTela }) {
-  const fazerLogin = (evento) => {
-    evento.preventDefault();
-    // Aqui no futuro você vai validar o usuário no banco de dados.
-    // Por enquanto, apenas mandamos ele para a tela principal (home).
-    mudarTela('home');
-  };
+export default function Login ({mudarTela}){
+  
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
-  return (
+  const logar = (e) => {
+    e.preventDefault();
+
+    if (email === '' || senha === ''){
+        alert("Ei, preencha todos os campos antes de entra!");
+        return;
+    }
+    mudarTela('home');
+
+  };
+  return( 
     <div className="login-container">
-      <h2>Entrar no Sistema</h2>
-      
-      <form onSubmit={fazerLogin}>
+      <h2> Entra no Sistema </h2>
+
+    <form onSubmit={logar}> 
         <div>
-          <label>Email:</label>
-          <input type="email" placeholder="Digite seu email" />
+          <label>Email:</label> 
+            <input 
+              type="email"
+              placeholder="Digite o seu email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            /> 
         </div>
-        
         <div>
-          <label>Senha:</label>
-          <input type="password" placeholder="Digite sua senha" />
+          <label>Email:</label> 
+            <input 
+              type="Senha"
+              placeholder="password"
+              value={senha}
+              onChange={(e) => setSenha (e.target.value)}
+            /> 
         </div>
-        
         <button type="submit">Entrar</button>
       </form>
-
       <p>
-        Não tem uma conta?{' '}
-        <button onClick={() => mudarTela('cadastro')} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}>
+      Não tem conta?{'' }
+      <button 
+      type="button"
+      onClick={() => mudarTela('cadastro')}
+      style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
+        >
           Cadastre-se aqui
         </button>
       </p>
     </div>
   );
 }
+
