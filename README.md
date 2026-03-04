@@ -86,3 +86,74 @@ Este repositório possui uma aplicação **frontend** em React + Vite dentro da 
 ## 5. Automação de Testes
 
 Os cenários acima servem de base para a automação utilizando **Selenium** com **Python**, validando o fluxo de ponta a ponta (E2E) desde o login até a manipulação da lista. Sempre que for subir uma nova alteração no código, os testes automatizados serão executados para garantir que as funcionalidades antigas continuam funcionando (teste de regressão).
+
+---
+
+## 6. Testes automatizados (BDD / Gherkin + Selenium)
+
+Os testes E2E foram implementados com:
+
+- `behave` (BDD) para executar os arquivos `.feature` (Gherkin)
+- `selenium` para automatizar o navegador
+
+Observação: como os cenários estão em português, cada arquivo `.feature` possui o cabeçalho:
+
+- `# language: pt`
+
+### Estrutura
+
+- `tests/requirements.txt`
+- `tests/features/login.feature`
+- `tests/features/itens.feature`
+- `tests/features/environment.py`
+- `tests/features/steps/ui_steps.py`
+
+### Como rodar (linha por linha)
+
+#### 1) Subir o frontend (terminal 1)
+
+1. Entrar na pasta do frontend:
+   - `cd tela-compras`
+2. Instalar dependências:
+   - `npm install`
+3. Subir o Vite:
+   - `npm run dev`
+
+Deixe esse terminal rodando.
+
+#### 2) Instalar dependências de teste (terminal 2)
+
+Na **raiz** do repositório (pasta `controle-compras-idoso`):
+
+- `pip install -r tests/requirements.txt`
+
+#### 3) Executar os testes
+
+Na **raiz** do repositório:
+
+- Rodar tudo:
+  - `behave tests/features`
+- Rodar só login:
+  - `behave tests/features/login.feature`
+- Rodar só itens:
+  - `behave tests/features/itens.feature`
+
+#### 4) Rodar em modo headless
+
+##### PowerShell
+
+1. Definir variáveis:
+   - `$env:BASE_URL="http://localhost:5173/"`
+   - `$env:HEADLESS="true"`
+2. Rodar (ex.: smoke):
+   - `behave -t "@smoke" tests/features`
+
+##### CMD (Prompt de Comando)
+
+1. Definir variáveis:
+   - `set BASE_URL=http://localhost:5173/`
+   - `set HEADLESS=true`
+2. Rodar (ex.: smoke):
+   - `behave -t "@smoke" tests/features`
+
+Importante: no Windows, use a tag entre aspas (`"@smoke"`) para evitar erro de parsing do argumento.
