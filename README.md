@@ -1,88 +1,88 @@
-🛒 Sistema de Controle de Necessidades e Compras (Cuidado ao Idoso)
-Projeto desenvolvido para a disciplina de Teste de Software. O sistema consiste em uma aplicação básica para que familiares gerenciem listas de compras de mercado e farmácia, servindo como base para a aplicação de testes automatizados e manuais.
+# 🛒 Sistema de Controle de Necessidades e Compras (Cuidado ao Idoso)
 
-🚀 Execução do projeto
-Pré-requisitos
-Node.js (LTS)
+Projeto desenvolvido para a disciplina de Teste de Software. O sistema consiste em uma aplicação básica (CRUD) para que familiares gerenciem listas de compras de mercado e farmácia para um ente querido idoso, servindo como base para a aplicação de testes automatizados e manuais.
 
-npm
+## Execução do projeto (como rodar)
 
-Rodando o Sistema
-Acesse a pasta: cd tela-compras
+Este repositório possui uma aplicação **frontend** em React + Vite dentro da pasta `tela-compras/`.
 
-Instale as dependências: npm install
+### Pré-requisitos
+- **Node.js** (recomendado: LTS)
+- **npm** (ou gerenciador compatível)
 
-Inicie o servidor: npm run dev
+### Rodando em desenvolvimento
+- Acesse a pasta do app: `cd tela-compras`
+- Instale as dependências: `npm install`
+- Suba o servidor de desenvolvimento: `npm run dev`
 
-Acesso ao Sistema (Credenciais de Teste):
+> **Acesso ao Sistema (Credenciais de Teste):**
+> - **Usuário:** admin@familia.com
+> - **Senha:** 123456
 
-Usuário: admin@familia.com
+---
 
-Senha: 123456
+## 1. Concepção e Escopo Atual
 
-1. Concepção e Escopo Atual
-Objetivo: Centralizar itens faltantes (remédios e mantimentos) para evitar compras duplicadas.
+* **Objetivo Geral:** Desenvolver um software básico para auxiliar famílias no controle, registro e divisão de compras de itens de necessidade diária para idosos.
+* **Objetivos Específicos:**
+    * Centralizar a lista de itens faltantes.
+    * Evitar compras duplicadas por diferentes membros da família.
+    * Manter um histórico básico do que já foi adquirido.
+* **Escopo Reduzido:** Foco no MVP para a disciplina de Teste de Software (Login e CRUD de itens).
 
-Fase Atual: MVP (Produto Mínimo Viável) focado em Login e Gerenciamento de Itens.
+---
 
-Escopo Reduzido: A funcionalidade de "Agenda de Consultas" foi movida para o backlog da próxima fase para focar na estabilidade dos testes de CRUD.
+## 2. Regras de Negócio (R&N)
 
-2. Regras de Negócio (R&N)
-Premissas:
+**Premissas:**
+* O acesso é restrito a familiares através de login.
+* O sistema utiliza armazenamento local (`localStorage`) para persistência de dados.
 
-O acesso é restrito a familiares através de login.
+**Restrições:**
+* O nome de um item não pode ficar em branco ao ser cadastrado.
+* O sistema deve validar se e-mail e senha foram preenchidos no login.
+* O acesso é bloqueado para credenciais inválidas.
 
-O sistema utiliza armazenamento local (localStorage) para persistência de dados no navegador.
+---
 
-Restrições:
+## 3. Histórias de Usuário (HdU)
 
-R&N 01: Não é permitido cadastrar um item sem nome.
+### HdU 01 - Login de Familiar
+* **Quem:** Familiar Colaborador
+* **O que:** Quero entrar no sistema com usuário e senha.
+* **Por que:** Para restringir o acesso e evitar que pessoas não autorizadas alterem a lista.
 
-R&N 02: O sistema deve validar se e-mail e senha foram preenchidos no login.
+### HdU 02 - Cadastro de Novo Item
+* **Quem:** Familiar Colaborador
+* **O que:** Quero adicionar um novo item de farmácia ou mercado na lista.
+* **Por que:** Para que os outros familiares saibam o que está faltando na casa do idoso.
 
-R&N 03: Acesso negado para credenciais que não constam na base (nesta fase, validado via usuário mestre).
+### HdU 03 - Atualização de Status
+* **Quem:** Familiar Responsável pelas Compras
+* **O que:** Quero marcar um item como "Comprado" ou "Arquivado".
+* **Por que:** Para evitar que outro familiar gaste dinheiro comprando o mesmo produto em duplicidade.
 
-3. Histórias de Usuário (HdU)
-HdU 01 - Login de Familiar
-O que: Quero entrar no sistema com meu e-mail e senha.
+---
 
-Valor: Garantir que apenas membros da família visualizem as necessidades do idoso.
+## 4. Requisitos e Critérios de Aceitação (BDD / Gherkin)
 
-Critério de Aceite: Exibir alerta de erro se os campos estiverem vazios ou incorretos.
+### Teste da HdU 01: Validação de Login Vazio
+* **Dado que** estou na tela de login.
+* **Quando** eu tento clicar em "Entrar" sem preencher os campos.
+* **Então** o sistema deve bloquear o acesso e exibir um alerta.
 
-HdU 02 - Cadastro de Necessidade (Farmácia/Mercado)
-O que: Quero adicionar um item informando nome, categoria (Medicamento, Higiene, Alimentação) e urgência.
+### Teste da HdU 01: Login com Sucesso
+* **Dado que** estou na tela de login.
+* **Quando** eu informo o e-mail `admin@familia.com` e a senha `123456`.
+* **Então** o sistema deve me direcionar para a tela de Controle de Suprimentos.
 
-Valor: Alertar outros familiares sobre o que é prioridade (Ex: Remédio que acabou).
+### Teste da HdU 02: Cadastro de novo item com campo vazio
+* **Dado que** estou na tela de cadastro de necessidades.
+* **Quando** eu clico no botão "Salvar" sem preencher o nome do produto.
+* **Então** o sistema deve exibir um alerta de preenchimento obrigatório e não deve salvar o registro.
 
-Critério de Aceite: O item deve aparecer na lista de pendências imediatamente após o cadastro.
+---
 
-HdU 03 - Controle de Status e Arquivamento
-O que: Quero marcar um item como "Comprado" ou "Arquivado".
+## 5. Automação de Testes
 
-Valor: Limpar a visão da lista para que todos saibam o que ainda falta comprar.
-
-4. Cenários de Teste (Gherkin / BDD)
-Teste de Login (HdU 01)
-Dado que estou na tela de login.
-
-Quando eu informo o e-mail admin@familia.com e a senha 123456.
-
-Então o sistema deve me direcionar para a tela de Controle de Suprimentos.
-
-Teste de Validação de Campo (HdU 02)
-Dado que estou no formulário de cadastro de itens.
-
-Quando eu tento salvar sem preencher o nome do item.
-
-Então o sistema deve exibir a mensagem: "O nome do item é obrigatório".
-
-Teste de Persistência
-Dado que eu cadastrei o item "Losartana 50mg".
-
-Quando eu atualizo a página (F5).
-
-Então o item deve continuar aparecendo na lista.
-
-5. Automação de Testes
-Os cenários acima servem de base para a automação utilizando Selenium + Python, validando o fluxo de ponta a ponta (E2E) desde o login até a manipulação da lista.
+Os cenários acima servem de base para a automação utilizando **Selenium** com **Python**, validando o fluxo de ponta a ponta (E2E) desde o login até a manipulação da lista. Sempre que for subir uma nova alteração no código, os testes automatizados serão executados para garantir que as funcionalidades antigas continuam funcionando (teste de regressão).
