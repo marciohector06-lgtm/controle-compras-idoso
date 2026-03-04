@@ -5,17 +5,22 @@ export default function Login({ mudarTela }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const logar = (e) => {
     e.preventDefault();
 
     setErrorMessage('');
 
+    if (isSubmitting) return;
+
     // Validação de campos vazios
-    if (email === '' || senha === '') {
+    if (email.trim() === '' || senha.trim() === '') {
       setErrorMessage('Ei, preencha todos os campos antes de entrar!');
       return;
     }
+
+    setIsSubmitting(true);
 
     // Regra de Acesso para a apresentação de hoje (Usuário Fixo)
     if (email === 'admin@familia.com' && senha === '123456') {
@@ -23,48 +28,71 @@ export default function Login({ mudarTela }) {
     } else {
       setErrorMessage('Acesso Negado: Familiar não identificado ou senha incorreta!');
     }
+
+    setIsSubmitting(false);
   };
 
   return (
-    <div className="cadastro-container">
-      <h2> Entrar no Sistema </h2>
-
-      <form className="cadastro-form" onSubmit={logar}> 
-
-        {errorMessage && (
-          <div className="form-error" data-testid="login-error">
-            {errorMessage}
+    <div className="login-page" data-testid="login-page">
+      <div className="login-card">
+        <header className="login-header">
+          <div className="login-icon-wrapper" aria-hidden="true">
+            <span className="login-heart">❤</span>
           </div>
-        )}
-        
-        <div className="input-group">
-          <label>Email:</label>
-          <input 
-            type="email"
-            placeholder="Digite o seu email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            data-testid="login-email"
-          />
-        </div>
+          <div className="login-title">
+            <h2>Cuidado ao Idoso</h2>
+            <p>Controle de Necessidades e Compras</p>
+          </div>
+        </header>
 
-        <div className="input-group">
-          <label>Senha:</label>
-          <input 
-            type="password"
-            placeholder="Digite sua senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            data-testid="login-senha"
-          />
-        </div>
-        
-        <button type="submit" data-testid="login-submit">Entrar</button>
-      </form>
+        <div className="login-content">
+          <form onSubmit={logar} className="login-form">
+            <div className="login-field">
+              <label htmlFor="login-email" className="login-label">E-mail</label>
+              <div className="input-with-icon">
+                <span className="field-icon" aria-hidden="true">✉</span>
+                <input
+                  id="login-email"
+                  type="email"
+                  placeholder="seu@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  data-testid="login-email"
+                  autoComplete="username"
+                />
+              </div>
+            </div>
 
-      <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px' }}>
-        Sistema de Cuidado Familiar Compartilhado
-      </p>
+            <div className="login-field">
+              <label htmlFor="login-senha" className="login-label">Senha</label>
+              <div className="input-with-icon">
+                <span className="field-icon" aria-hidden="true">🔒</span>
+                <input
+                  id="login-senha"
+                  type="password"
+                  placeholder="••••••"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  data-testid="login-senha"
+                  autoComplete="current-password"
+                />
+              </div>
+            </div>
+
+            {errorMessage && (
+              <p className="login-error" role="alert" data-testid="login-error">
+                {errorMessage}
+              </p>
+            )}
+
+            <button type="submit" className="login-submit" data-testid="login-submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Entrando...' : 'Entrar'}
+            </button>
+          </form>
+
+          <p className="login-footer">Acesso restrito aos familiares cadastrados</p>
+        </div>
+      </div>
     </div>
   );
 }
