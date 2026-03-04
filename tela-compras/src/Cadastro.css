@@ -30,8 +30,12 @@
   gap: 16px;
 }
 
+
 .cadastro-form input[type="text"],
+.cadastro-form input[type="email"],
+.cadastro-form input[type="password"],
 .cadastro-form select {
+
   padding: 12px;
   border: 1px solid #ced4da;
   border-radius: 4px;
