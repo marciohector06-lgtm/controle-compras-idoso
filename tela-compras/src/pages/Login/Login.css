@@ -48,6 +48,15 @@
   flex: 1;
 }
 
+.form-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+  color: #842029;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
 .error-text {
   color: #dc3545;
   font-size: 0.875rem;
