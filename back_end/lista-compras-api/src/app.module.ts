@@ -1,24 +1,24 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
+// Importação dos módulos que você gerou para o MVP
 import { UsuarioModule } from './usuario/usuario.module';
-import { ItensCompraModule } from './itens-compra/itens-compra.module';
 import { CategoriasModule } from './categorias/categorias.module';
+import { ItensCompraModule } from './itens-compra/itens-compra.module';
+
+// Importação do módulo do Prisma (que fará a conexão com o banco)
+import { PrismaService } from './prisma/prisma.service';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'database.sqlite',
-      entities: [], 
-      synchronize: false,
-    }),
     UsuarioModule,
-    ItensCompraModule,
     CategoriasModule,
+    ItensCompraModule,
+    PrismaModule, // Descomente esta linha quando criarmos o PrismaModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}
