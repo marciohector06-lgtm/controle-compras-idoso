@@ -16,18 +16,37 @@ export class ItensCompraService {
         observacao: createItensCompraDto.observacao,
         categoriaId: createItensCompraDto.categoriaId,
         criadoPorId: 1
+      },
+      include: {
+        criadoPor: true,
+        atualizadoPor: true,
+        compradoPor: true,
+        categoria: true
       }
     });
   }
 
   findAll() {
-    return this.prismaService.item.findMany();
+    return this.prismaService.item.findMany({
+      include: {
+        criadoPor: true,
+        atualizadoPor: true,
+        compradoPor: true,
+        categoria: true
+      }
+    });
   }
 
   findOne(id: number) {
     return this.prismaService.item.findUnique({
       where: {
         id
+      },
+      include:{
+        criadoPor: true,
+        atualizadoPor: true,
+        compradoPor: true,
+        categoria: true
       }
     });
   }
@@ -42,6 +61,12 @@ export class ItensCompraService {
         quantidade: updateItensCompraDto.quantidade,
         observacao: updateItensCompraDto.observacao,
         categoriaId: updateItensCompraDto.categoriaId
+      },
+      include: {
+        criadoPor: true,
+        atualizadoPor: true,
+        compradoPor: true,
+        categoria: true
       }
     });
   }
