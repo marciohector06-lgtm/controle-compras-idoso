@@ -10,6 +10,42 @@ model Usuario{
   id Int @id @default(autoincrement())
   email String @unique
   senha String
-  nome String?
+  nome String
   perfil String
+
+  itensCriados Item[] @relation("criadoPor")
+  itensAtualizados Item[] @relation("atualizadoPor")
+  itensComprados Item[] @relation("compradoPor")
+}
+
+model Categoria{
+  id Int @id @default(autoincrement())
+  nome String
+
+  categoriaId Item[] @relation("categoria")
+}
+
+model Item{
+  id Int @id @default(autoincrement())
+  nome String
+  quantidade Int
+  observacao String?
+
+  categoriaId Int
+  categoria Categoria @relation("categoria", fields: [categoriaId], references: [id])
+
+  criadoPorId Int
+  criadoPor Usuario @relation("criadoPor", fields: [criadoPorId], references: [id])
+
+  atualizadoPorId Int?
+  atualizadoPor Usuario? @relation("atualizadoPor", fields: [atualizadoPorId], references: [id])
+
+  compradoPorId Int?
+  compradoPor Usuario? @relation("compradoPor", fields: [compradoPorId], references: [id])
+
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  comprado Boolean @default(false)
+  compradoEm DateTime?
 }

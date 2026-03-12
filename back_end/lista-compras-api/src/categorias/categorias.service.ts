@@ -9,22 +9,41 @@ export class CategoriasService {
   constructor(private prismaService: PrismaService) {}
 
   create(createCategoriaDto: CreateCategoriaDto) {
-    return 'This action adds a new categoria';
+    return this.prismaService.categoria.create({
+      data: {
+        nome: createCategoriaDto.nome
+      }
+    });
   }
 
   findAll() {
-    return `This action returns all categorias`;
+    return this.prismaService.categoria.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} categoria`;
+    return this.prismaService.categoria.findUnique({
+      where: {
+        id
+      }
+    });
   }
 
   update(id: number, updateCategoriaDto: UpdateCategoriaDto) {
-    return `This action updates a #${id} categoria`;
+    return this.prismaService.categoria.update({
+      where: {
+        id
+      },
+      data: {
+        nome: updateCategoriaDto.nome
+      }
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} categoria`;
+    return this.prismaService.categoria.delete({
+      where: {
+        id
+      }
+    });
   }
 }

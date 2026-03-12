@@ -23,15 +23,33 @@ export class UsuarioService {
     return await this.prismaService.usuario.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async findOne(id: number) {
+    return await this.prismaService.usuario.findUnique({
+      where: {
+        id: id
+      }
+    });
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    return await this.prismaService.usuario.update({
+      where: {
+        id: id
+      },
+      data: {
+        nome: updateUsuarioDto.nome,
+        email: updateUsuarioDto.email,
+        senha: updateUsuarioDto.senha,
+        perfil: updateUsuarioDto.perfil
+      }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async remove(id: number) {
+    return await this.prismaService.usuario.delete({
+      where: {
+        id: id
+      }
+    });
   }
 }

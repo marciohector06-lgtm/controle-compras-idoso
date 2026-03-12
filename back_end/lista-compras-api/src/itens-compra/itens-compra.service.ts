@@ -9,22 +9,48 @@ export class ItensCompraService {
   constructor(private prismaService: PrismaService) {}
 
   create(createItensCompraDto: CreateItensCompraDto) {
-    return 'This action adds a new itensCompra';
+    return this.prismaService.item.create({
+      data: {
+        nome: createItensCompraDto.nome,
+        quantidade: createItensCompraDto.quantidade,
+        observacao: createItensCompraDto.observacao,
+        categoriaId: createItensCompraDto.categoriaId,
+        criadoPorId: 1
+      }
+    });
   }
 
   findAll() {
-    return `This action returns all itensCompra`;
+    return this.prismaService.item.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} itensCompra`;
+    return this.prismaService.item.findUnique({
+      where: {
+        id
+      }
+    });
   }
 
   update(id: number, updateItensCompraDto: UpdateItensCompraDto) {
-    return `This action updates a #${id} itensCompra`;
+    return this.prismaService.item.update({
+      where: {
+        id
+      },
+      data: {
+        nome: updateItensCompraDto.nome,
+        quantidade: updateItensCompraDto.quantidade,
+        observacao: updateItensCompraDto.observacao,
+        categoriaId: updateItensCompraDto.categoriaId
+      }
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} itensCompra`;
+    return this.prismaService.item.delete({
+      where: {
+        id
+      }
+    });
   }
 }
