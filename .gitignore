@@ -1,0 +1,32 @@
+# Dependências do Node.js (Ignora em TODAS as subpastas)
+node_modules/
+
+# Variáveis de Ambiente (MUITO IMPORTANTE para não vazar senhas)
+.env
+.env.*
+!.env.example
+
+# Build e compilação do Back-end
+dist/
+build/
+out/
+
+# Arquivos de Banco de Dados / Prisma (Evita subir seu banco local)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Testes e Cobertura (Relacionado à sua pasta 'tests')
+coverage/
+.nyc_output/
+
+# Logs de erro
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Arquivos do Sistema Operacional (Windows/Mac)
+.DS_Store
+Thumbs.db
