@@ -22,7 +22,8 @@ export class UsuarioController {
     return this.usuarioService.findAll();
   }
 
-  @Public()
+  @Roles(PerfilUsuario.ADMIN)
+  // @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usuarioService.findOne(+id);
@@ -33,6 +34,7 @@ export class UsuarioController {
     return this.usuarioService.update(+id, updateUsuarioDto);
   }
 
+  @Public()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usuarioService.remove(+id);
