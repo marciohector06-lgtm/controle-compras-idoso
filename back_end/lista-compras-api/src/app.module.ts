@@ -10,13 +10,15 @@ import { ItensCompraModule } from './itens-compra/itens-compra.module';
 // Importação do módulo do Prisma (que fará a conexão com o banco)
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     UsuarioModule,
     CategoriasModule,
     ItensCompraModule,
-    PrismaModule, // Descomente esta linha quando criarmos o PrismaModule
+    PrismaModule,
+    AuthModule, // Descomente esta linha quando criarmos o PrismaModule
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
