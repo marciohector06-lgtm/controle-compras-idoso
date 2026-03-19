@@ -11,6 +11,9 @@ import { ItensCompraModule } from './itens-compra/itens-compra.module';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './common/guards/auth.guard';
+import { RolesGuard } from './common/guards/roles.guard';
 
 @Module({
   imports: [
@@ -18,9 +21,19 @@ import { AuthModule } from './auth/auth.module';
     CategoriasModule,
     ItensCompraModule,
     PrismaModule,
-    AuthModule, // Descomente esta linha quando criarmos o PrismaModule
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService,
+    PrismaService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard, 
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard, 
+    },
+  ],
 })
 export class AppModule {}

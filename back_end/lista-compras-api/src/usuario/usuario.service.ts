@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PerfilUsuario } from './enums/role.enums';
 
 @Injectable()
 export class UsuarioService {
@@ -14,7 +15,7 @@ export class UsuarioService {
         nome: createUsuarioDto.nome,
         email: createUsuarioDto.email,
         senha: createUsuarioDto.senha,
-        perfil: createUsuarioDto.perfil
+        perfil: createUsuarioDto.perfil ?? PerfilUsuario.FAMILIA
       }
     });
   }
