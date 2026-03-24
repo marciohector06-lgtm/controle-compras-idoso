@@ -8,14 +8,14 @@ export class ItensCompraService {
 
   constructor(private prismaService: PrismaService) {}
 
-  create(createItensCompraDto: CreateItensCompraDto) {
+  create(createItensCompraDto: CreateItensCompraDto, usuarioId: number) {
     return this.prismaService.item.create({
       data: {
         nome: createItensCompraDto.nome,
         quantidade: createItensCompraDto.quantidade,
         observacao: createItensCompraDto.observacao,
         categoriaId: createItensCompraDto.categoriaId,
-        criadoPorId: 1
+        criadoPorId: usuarioId
       },
       include: {
         criadoPor: true,

@@ -3,21 +3,30 @@ import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PerfilUsuario } from './enums/role.enums';
+import { HashService } from 'src/common/hash.service';
 
 @Injectable()
 export class UsuarioService {
 
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private hashService: HashService
+  ) {}
 
   async create(createUsuarioDto: CreateUsuarioDto) {
-    return await this.prismaService.usuario.create({
+    const senhaCriptografada = await this.hashService.gerarHash(createUsuarioDto.senha)
+
+    const usuario = await this.prismaService.usuario.create({
       data: {
-        nome: createUsuarioDto.nome,
-        email: createUsuarioDto.email,
-        senha: createUsuarioDto.senha,
+        ...createUsuarioDto,
+        senha: senhaCriptografada,
         perfil: createUsuarioDto.perfil ?? PerfilUsuario.FAMILIA
       }
     });
+
+    const { senha, ...usuarioSemSenha } = usuario;
+
+    return usuarioSemSenha;
   }
 
   async findAll() {
@@ -41,17 +50,22 @@ export class UsuarioService {
   }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return await this.prismaService.usuario.update({
+    const dadosParaAtualizar: any = { ...updateUsuarioDto }
+
+    if(updateUsuarioDto.senha){
+      dadosParaAtualizar.senha = await this.hashService.gerarHash(updateUsuarioDto.senha);
+    }
+
+    const usuarioAtualizado = await this.prismaService.usuario.update({
       where: {
         id: id
       },
-      data: {
-        nome: updateUsuarioDto.nome,
-        email: updateUsuarioDto.email,
-        senha: updateUsuarioDto.senha,
-        perfil: updateUsuarioDto.perfil
-      }
+      data: dadosParaAtualizar
     });
+
+    const { senha, ...usuarioAtualizadoSemSenha } = usuarioAtualizado
+
+    return usuarioAtualizadoSemSenha
   }
 
   async remove(id: number) {
