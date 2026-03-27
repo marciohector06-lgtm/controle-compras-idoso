@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, IsEmail } from "class-validator";
+import { IsNotEmpty, IsString, IsEmail, IsOptional, IsEnum } from "class-validator";
+import { PerfilUsuario } from "../enums/role.enums";
 
 
 export class CreateUsuarioDto {
@@ -14,7 +15,7 @@ export class CreateUsuarioDto {
     @IsNotEmpty()
     senha: string;
 
-    @IsString()
-    @IsNotEmpty()
-    perfil: string;
+    @IsOptional()
+    @IsEnum(PerfilUsuario)
+    perfil?: PerfilUsuario;
 }

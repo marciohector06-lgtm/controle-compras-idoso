@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { ItensCompraService } from './itens-compra.service';
 import { CreateItensCompraDto } from './dto/create-itens-compra.dto';
 import { UpdateItensCompraDto } from './dto/update-itens-compra.dto';
@@ -8,8 +8,10 @@ export class ItensCompraController {
   constructor(private readonly itensCompraService: ItensCompraService) {}
 
   @Post()
-  create(@Body() createItensCompraDto: CreateItensCompraDto) {
-    return this.itensCompraService.create(createItensCompraDto);
+  create(@Body() createItensCompraDto: CreateItensCompraDto, @Req() req: any) {
+    const usuarioId = req.usuario.sub
+
+    return this.itensCompraService.create(createItensCompraDto, usuarioId);
   }
 
   @Get()

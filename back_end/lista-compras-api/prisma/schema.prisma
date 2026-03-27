@@ -11,7 +11,7 @@ model Usuario{
   email String @unique
   senha String
   nome String
-  perfil String
+  perfil String @default("FAMILIA")
 
   itensCriados Item[] @relation("criadoPor")
   itensAtualizados Item[] @relation("atualizadoPor")

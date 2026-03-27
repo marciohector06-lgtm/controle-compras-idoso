@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -10,15 +11,35 @@ import { ItensCompraModule } from './itens-compra/itens-compra.module';
 // Importação do módulo do Prisma (que fará a conexão com o banco)
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './common/guards/auth.guard';
+import { RolesGuard } from './common/guards/roles.guard';
+
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true
+    }),
     UsuarioModule,
     CategoriasModule,
     ItensCompraModule,
-    PrismaModule, // Descomente esta linha quando criarmos o PrismaModule
+    PrismaModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService,
+    PrismaService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard, 
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard, 
+    },
+  ],
 })
 export class AppModule {}
