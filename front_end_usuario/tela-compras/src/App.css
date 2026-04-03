@@ -1,33 +1,91 @@
 body {
-  background-color: #e2e8f0;
+  background-image: url('/bg-dashboard.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   margin: 0;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .main-container {
-  max-width: 800px;
-  margin: 40px auto;
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 1000px;
+  margin: 30px auto;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 36px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  position: relative;
+  z-index: 1;
 }
 
 .app-header {
   text-align: center;
-  margin-bottom: 30px;
-  color: #2c3e50;
-  border-bottom: 2px solid #f8f9fa;
-  padding-bottom: 15px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 20px;
+}
+
+.header-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: rgba(13, 110, 253, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-heart {
+  font-size: 24px;
+  line-height: 1;
+  color: #0d6efd;
 }
 
 .app-header h1 {
-  margin: 0 0 10px 0;
-  font-size: 2rem;
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #212529;
 }
 
 .app-header p {
   margin: 0;
   color: #6c757d;
-  font-size: 1.1rem;
+  font-size: 14px;
+}
+
+.btn-sair {
+  height: 40px;
+  padding: 0 18px;
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.05s;
+}
+
+.btn-sair:hover {
+  background-color: #bb2d3b;
+}
+
+.btn-sair:active {
+  transform: translateY(1px);
 }

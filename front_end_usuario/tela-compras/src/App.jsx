@@ -35,14 +35,22 @@ const App = () => {
   return (
     <main className="main-container">
       <header className="app-header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h1>Controle de Suprimentos do Idoso</h1>
-          <button 
-            onClick={() => setTelaAtual('login')}
-            style={{ padding: '8px 15px', cursor: 'pointer', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '5px' }}
-          >
-            Sair
-          </button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <div style={{ flex: 1 }}></div>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+            <div className="header-icon-wrapper">
+              <span className="header-heart">❤</span>
+            </div>
+            <h1 style={{ margin: 0 }}>Controle de Suprimentos do Idoso</h1>
+          </div>
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+            <button 
+              onClick={() => setTelaAtual('login')}
+              className="btn-sair"
+            >
+              Sair
+            </button>
+          </div>
         </div>
         <p>Gestão de Farmácia e Mercado</p>
       </header>

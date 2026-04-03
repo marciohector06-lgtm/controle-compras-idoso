@@ -34,6 +34,14 @@ export default function Login({ mudarTela }) {
 
   return (
     <div className="login-page" data-testid="login-page">
+      <div className="login-branding">
+        <div className="login-branding-icon">❤</div>
+        <div className="login-branding-text">
+          <h3>Cuidado ao Idoso</h3>
+          <p>Família &amp; Cuidado</p>
+        </div>
+      </div>
+
       <div className="login-card">
         <header className="login-header">
           <div className="login-icon-wrapper" aria-hidden="true">
@@ -93,6 +101,9 @@ export default function Login({ mudarTela }) {
           <p className="login-footer">Acesso restrito aos familiares cadastrados</p>
         </div>
       </div>
+
+      <p className="login-page-footer">Cuidado ao Idoso &copy; 2026</p>
+
     </div>
   );
 }
