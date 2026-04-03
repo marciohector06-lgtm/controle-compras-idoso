@@ -11,26 +11,41 @@ const Cadastro = ({ onAddItem }) => {
     idoso: ''
   });
   
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errors, setErrors] = useState({ nome: '', idoso: '', responsavel: '' });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    if (name === 'nome' && errorMessage) setErrorMessage('');
+    if (errors[name]) setErrors({ ...errors, [name]: '' });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const newErrors = { nome: '', idoso: '', responsavel: '' };
+    let hasError = false;
+
     if (!formData.nome.trim()) {
-      setErrorMessage("O nome do item é obrigatório");
+      newErrors.nome = 'O nome do item é obrigatório';
+      hasError = true;
+    }
+    if (!formData.idoso.trim()) {
+      newErrors.idoso = 'O nome do idoso é obrigatório';
+      hasError = true;
+    }
+    if (!formData.responsavel.trim()) {
+      newErrors.responsavel = 'O nome do familiar responsável é obrigatório';
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
       return;
     }
 
     onAddItem(formData);
-    
     setFormData({ nome: '', categoria: 'Medicamento', urgencia: 'Normal', obs: '', responsavel: '', idoso: '' });
-    setErrorMessage('');
+    setErrors({ nome: '', idoso: '', responsavel: '' });
   };
 
   return (
@@ -45,9 +60,10 @@ const Cadastro = ({ onAddItem }) => {
             value={formData.nome}
             onChange={handleInputChange}
             placeholder="Nome do item (Ex: Losartana 50mg)"
+            className={errors.nome ? 'input-error' : ''}
             data-testid="input-new-item"
           />
-          {errorMessage && <span className="error-text" data-testid="error-message">{errorMessage}</span>}
+          {errors.nome && <p className="error-text" data-testid="error-message">{errors.nome}</p>}
         </div>
 
         <div className="input-group">
@@ -57,7 +73,9 @@ const Cadastro = ({ onAddItem }) => {
             value={formData.idoso}
             onChange={handleInputChange}
             placeholder="Para qual idoso? (Ex: Vô João)"
+            className={errors.idoso ? 'input-error' : ''}
           />
+          {errors.idoso && <p className="error-text">{errors.idoso}</p>}
         </div>
 
         <div className="input-group">
@@ -67,7 +85,9 @@ const Cadastro = ({ onAddItem }) => {
             value={formData.responsavel}
             onChange={handleInputChange}
             placeholder="Seu nome (Familiar responsável)"
+            className={errors.responsavel ? 'input-error' : ''}
           />
+          {errors.responsavel && <p className="error-text">{errors.responsavel}</p>}
         </div>
 
         <div className="row-group">
