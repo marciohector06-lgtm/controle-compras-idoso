@@ -43,7 +43,7 @@ export default function Login({ mudarTela, onLoginSuccess }) {
             const currentUser = {
               ...perfil,
               token,
-              role: perfil.role || perfil.perfil || (email === 'admin@familia.com' ? 'admin' : 'familia')
+              role: (perfil.role || perfil.perfil || 'familia').toLowerCase()
             };
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
             onLoginSuccess?.(currentUser);

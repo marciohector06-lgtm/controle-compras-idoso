@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import './GerenciarCategorias.css';
 
+const API = 'http://localhost:3000/categorias';
+
+const getToken = () => {
+  try {
+    return JSON.parse(localStorage.getItem('currentUser') || '{}').token || '';
+  } catch {
+    return '';
+  }
+};
+
 export default function GerenciarCategorias({ onBack }) {
   const [nome, setNome] = useState('');
   const [error, setError] = useState('');
   const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('categorias');
-    if (saved) {
-      setCategorias(JSON.parse(saved));
-    } else {
-      // Categorias padrão
-      const padroes = [
-        { id: '1', nome: 'Medicamento' },
-        { id: '2', nome: 'Higiene Pessoal' },
-        { id: '3', nome: 'Alimentação' },
-        { id: '4', nome: 'Outros' }
-      ];
-      setCategorias(padroes);
-      localStorage.setItem('categorias', JSON.stringify(padroes));
-    }
+    fetch(API, { headers: { Authorization: `Bearer ${getToken()}` } })
+      .then(r => r.ok ? r.json() : [])
+      .then(setCategorias)
+      .catch(() => {});
   }, []);
 
-  const handleAddCategoria = (e) => {
+  const handleAddCategoria = async (e) => {
     e.preventDefault();
 
     if (!nome.trim()) {
@@ -37,23 +37,39 @@ export default function GerenciarCategorias({ onBack }) {
       return;
     }
 
-    const novaCategoria = {
-      id: crypto.randomUUID(),
-      nome: nome.trim()
-    };
+    try {
+      const resp = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify({ nome: nome.trim() }),
+      });
 
-    const atualizadas = [...categorias, novaCategoria];
-    setCategorias(atualizadas);
-    localStorage.setItem('categorias', JSON.stringify(atualizadas));
-
-    setNome('');
-    setError('');
+      if (resp.ok) {
+        const nova = await resp.json();
+        setCategorias(prev => [...prev, nova]);
+        setNome('');
+        setError('');
+      } else {
+        const data = await resp.json();
+        setError(Array.isArray(data.message) ? data.message[0] : data.message);
+      }
+    } catch {
+      setError('Erro ao comunicar com o servidor.');
+    }
   };
 
-  const handleDeleteCategoria = (id) => {
-    const atualizadas = categorias.filter(c => c.id !== id);
-    setCategorias(atualizadas);
-    localStorage.setItem('categorias', JSON.stringify(atualizadas));
+  const handleDeleteCategoria = async (id) => {
+    try {
+      const resp = await fetch(`${API}/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      if (resp.ok) {
+        setCategorias(prev => prev.filter(c => c.id !== id));
+      }
+    } catch {
+      // ignore
+    }
   };
 
   return (
