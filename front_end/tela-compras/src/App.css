@@ -114,18 +114,21 @@ body::before {
 }
 
 .btn-menu {
-  height: 40px;
-  width: 40px;
+  width: 100%;
+  height: 56px;
+  padding: 0 24px;
   background-color: #0d6efd;
   color: #ffffff;
   border: none;
-  border-radius: 10px;
-  font-size: 18px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.05s;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 12px;
 }
 
 .btn-menu:hover {
