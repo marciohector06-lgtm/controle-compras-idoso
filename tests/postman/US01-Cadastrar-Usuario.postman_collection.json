@@ -1,0 +1,126 @@
+{
+  "info": {
+    "name": "US-01 — Cadastrar Conta de Usuário",
+    "description": "Testes de API para o endpoint POST /usuario (US-001).\n\nOrdem de execução recomendada: CT01 → CT02 → CT03 (CT03 depende de CT01 ter criado o e-mail).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "CT01 — Cadastro com dados válidos",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Caio Caetano\",\n  \"email\": \"caio.test@example.com\",\n  \"senha\": \"Abc123!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/usuario",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["usuario"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code deve ser 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Resposta deve conter o e-mail cadastrado\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.email).to.eql(\"caio.test@example.com\");",
+              "});",
+              "",
+              "pm.test(\"Senha não deve aparecer na resposta\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.not.have.property(\"senha\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CT02 — E-mail em formato inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Caio Caetano\",\n  \"email\": \"emailinvalido\",\n  \"senha\": \"Abc123!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/usuario",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["usuario"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code deve ser 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Resposta deve indicar erro de validação de e-mail\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.statusCode).to.eql(400);",
+              "    pm.expect(JSON.stringify(json.message)).to.include(\"email\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CT03 — E-mail já cadastrado",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Maria Silva\",\n  \"email\": \"caio.test@example.com\",\n  \"senha\": \"Abc123!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/usuario",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["usuario"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code deve ser 409\", function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "",
+              "pm.test(\"Mensagem deve indicar e-mail já cadastrado\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.message).to.eql(\"E-mail já cadastrado\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

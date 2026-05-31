@@ -1,0 +1,164 @@
+{
+  "info": {
+    "name": "US-04 — Cadastrar Categoria de Item",
+    "description": "Testes de API para o endpoint POST /categorias (US-004).\n\nEste endpoint exige autenticação com perfil ADMIN.\nO request 'Setup — Login Admin' deve ser executado primeiro para obter o token JWT.\nO token é salvo automaticamente na variável de coleção 'admin_token'.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Setup — Login Admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@example.com\",\n  \"senha\": \"admin1!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/login",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["auth", "login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Login realizado com sucesso\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set(\"admin_token\", json.access_token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CT01 — Categoria com nome válido",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Higiene Pessoal\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/categorias",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categorias"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code deve ser 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Resposta deve conter o nome da categoria\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.nome).to.eql(\"Higiene Pessoal\");",
+              "});",
+              "",
+              "pm.test(\"Resposta deve conter id da categoria criada\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"id\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CT02 — Nome de categoria vazio",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/categorias",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categorias"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code deve ser 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Mensagem deve indicar campo obrigatório\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(JSON.stringify(json.message)).to.include(\"nome da categoria\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CT03 — Sem token de autenticação",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Alimentação\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/categorias",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categorias"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code deve ser 401\", function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
