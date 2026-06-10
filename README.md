@@ -4,7 +4,7 @@ Projeto desenvolvido para a disciplina de Teste de Software. O sistema consiste 
 
 ## Execução do projeto (como rodar)
 
-Este repositório possui uma aplicação **frontend** em React + Vite dentro da pasta `front_end_usuario/tela-compras/` e uma **API backend** em NestJS dentro da pasta `back_end/lista-compras-api/`.
+Este repositório possui uma aplicação **frontend** em React + Vite dentro da pasta `front_end/tela-compras/` e uma **API backend** em NestJS dentro da pasta `back_end/lista-compras-api/`.
 
 ### Pré-requisitos
 - **Node.js** (recomendado: LTS)
@@ -36,8 +36,8 @@ Este comando irá:
 Acesse no navegador: **`http://localhost:3000`**
 
 > **Acesso ao Sistema (Credenciais de Teste):**
-> - **Usuário:** admin@familia.com
-> - **Senha:** 123456
+> - **Usuário:** admin@example.com
+> - **Senha:** admin1!
 
 ---
 
@@ -45,7 +45,7 @@ Acesse no navegador: **`http://localhost:3000`**
 
 ### Frontend (React + Vite)
 
-- Acesse a pasta do app: `cd front_end_usuario/tela-compras`
+- Acesse a pasta do app: `cd front_end/tela-compras`
 - Instale as dependências: `npm install`
 - Suba o servidor de desenvolvimento: `npm run dev`
 - Acesse no navegador: `http://localhost:5173`
